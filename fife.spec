@@ -89,7 +89,7 @@ Dokumentacja API biblioteki %{name}.
 %patch0 -p1
 
 %build
-%scons fife-shared fife-python \
+%scons -j1 fife-shared fife-python \
 	%{?with_static_libs:fife-static} \
 	--lib-dir=%{_libdir} \
 	--prefix=%{_prefix} \
@@ -98,7 +98,7 @@ Dokumentacja API biblioteki %{name}.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%scons install-shared install-python install-dev \
+%scons -j1 install-shared install-python install-dev \
 	%{?with_static_libs:install-static} \
 	--lib-dir=%{_libdir} \
 	--prefix=%{_prefix} \
