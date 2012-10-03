@@ -26,6 +26,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	python-devel >= 2.7
 BuildRequires:	scons
+BuildRequires:	swig-python
 BuildRequires:	tinyxml-devel
 BuildRequires:	xorg-lib-libXcursor-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
