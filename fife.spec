@@ -6,12 +6,12 @@
 #
 Summary:	Flexible Isometric Free Engine
 Name:		fife
-Version:	0.3.3r3
-Release:	9
+Version:	0.3.5
+Release:	1
 License:	LGPL v2
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/fife/%{name}_%{version}.tar.gz
-# Source0-md5:	ee39612009e124263dc79d1f0fa7ca7c
+# Source0-md5:	11ba50b34239535a270d442466632ef7
 Patch0:		%{name}-extra_libs.patch
 URL:		http://fifengine.net/
 BuildRequires:	OpenAL-devel
