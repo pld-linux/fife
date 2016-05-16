@@ -7,7 +7,7 @@
 Summary:	Flexible Isometric Free Engine
 Name:		fife
 Version:	0.3.5
-Release:	2
+Release:	3
 License:	LGPL v2
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/fife/%{name}_%{version}.tar.gz
