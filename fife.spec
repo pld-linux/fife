@@ -1,14 +1,13 @@
 #
-# TODO:
-#	- package apidocs
-#
+# Conditional build:
 %bcond_without	static_libs	# don't build static libraries
 #
 Summary:	Flexible Isometric Free Engine
+Summary(pl.UTF-8):	Flexible Isometric Free Engine - elastyczny, wolnodostępny silnik izometryczny
 Name:		fife
 Version:	0.3.5
-Release:	3
-License:	LGPL v2
+Release:	4
+License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/fife/%{name}_%{version}.tar.gz
 # Source0-md5:	11ba50b34239535a270d442466632ef7
@@ -37,32 +36,39 @@ with Python bindings. It's designed to be flexible enough to support a
 wide variety of 2D game types but specializes in 2D isometric type
 views.
 
+%description -l pl.UTF-8
+FIFE to wieloplatformowy szkielet do tworzenia gier 2D napisany w C++
+z wiązaniami do Pythona. Jest zaprojektowany jako wystarczająco
+elastyczny do obsługi wielu rodzajów gier 2D, ale specjalizuje się w
+widokach 2D typu izometrycznego.
+
 %package devel
-Summary:	Header files for %{name} library
-Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki %{name}
+Summary:	Header files for FIFE library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki FIFE
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
-Header files for %{name} library.
+Header files for FIFE library.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe biblioteki %{name}.
+Pliki nagłówkowe biblioteki FIFE.
 
 %package static
-Summary:	Static %{name} library
-Summary(pl.UTF-8):	Statyczna biblioteka %{name}
+Summary:	Static FIFE library
+Summary(pl.UTF-8):	Statyczna biblioteka FIFE
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static %{name} library.
+Static FIFE library.
 
 %description static -l pl.UTF-8
-Statyczna biblioteka %{name}.
+Statyczna biblioteka FIFE.
 
 %package -n python-%{name}
 Summary:	Flexible Isometric Free Engine Python Module
+Summary(pl.UTF-8):	Moduł Pythona do silnika FIFE (Flexible Isometric Free Engine)
 Group:		Development/Languages/Python
 Requires:	%{name} = %{version}-%{release}
 Requires:	python-modules
@@ -73,22 +79,23 @@ with Python bindings. It's designed to be flexible enough to support a
 wide variety of 2D game types but specializes in 2D isometric type
 views.
 
-%package apidocs
-Summary:	%{name} API documentation
-Summary(pl.UTF-8):	Dokumentacja API biblioteki %{name}
-Group:		Documentation
+This package contains Python module.
 
-%description apidocs
-API and internal documentation for %{name} library.
+%description -n python-%{name} -l pl.UTF-8
+FIFE to wieloplatformowy szkielet do tworzenia gier 2D napisany w C++
+z wiązaniami do Pythona. Jest zaprojektowany jako wystarczająco
+elastyczny do obsługi wielu rodzajów gier 2D, ale specjalizuje się w
+widokach 2D typu izometrycznego.
 
-%description apidocs -l pl.UTF-8
-Dokumentacja API biblioteki %{name}.
+Ten pakiet zawiera moduł Pythona.
 
 %prep
 %setup -qn %{name}_%{version}
 %patch0 -p1
 
 %build
+# force pre C++11 standard, code uses std::make_pair in a way incompatible with rvalue refs
+CXXFLAGS="%{rpmcxxflags} -std=c++03"
 %scons -j1 fife-shared fife-python \
 	%{?with_static_libs:fife-static} \
 	--lib-dir=%{_libdir} \
@@ -98,6 +105,7 @@ Dokumentacja API biblioteki %{name}.
 %install
 rm -rf $RPM_BUILD_ROOT
 
+CXXFLAGS="%{rpmcxxflags} -std=c++03"
 %scons -j1 install-shared install-python install-dev \
 	%{?with_static_libs:install-static} \
 	--lib-dir=%{_libdir} \
@@ -107,9 +115,13 @@ rm -rf $RPM_BUILD_ROOT
 
 SAVED_PWD=$PWD
 cd $RPM_BUILD_ROOT%{_libdir}
-ln -s lib%{name}.so.0.?.? lib%{name}.so.0
-ln -s lib%{name}.so.0.?.? lib%{name}.so
+ln -s libfife.so.0.?.? libfife.so.0
+ln -s libfife.so.0.?.? libfife.so
 cd $SAVED_PWD
+
+%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
+%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -120,29 +132,23 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS CHANGES README
-%attr(755,root,root) %{_libdir}/lib%{name}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib%{name}.so.0
+%attr(755,root,root) %{_libdir}/libfife.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfife.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib%{name}.so
+%attr(755,root,root) %{_libdir}/libfife.so
 %{_includedir}/%{name}
-
-%files -n python-%{name}
-%defattr(644,root,root,755)
-%dir %{py_sitedir}/%{name}
-%attr(755,root,root) %{py_sitedir}/%{name}/*.so
-%{py_sitedir}/%{name}/*.py*
-%{py_sitedir}/%{name}/extensions
 
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib%{name}.a
+%{_libdir}/libfife.a
 %endif
 
-%if %{with apidocs}
-%files apidocs
+%files -n python-%{name}
 %defattr(644,root,root,755)
-%doc apidocs/*
-%endif
+%dir %{py_sitedir}/%{name}
+%attr(755,root,root) %{py_sitedir}/%{name}/_fife.so
+%{py_sitedir}/%{name}/*.py[co]
+%{py_sitedir}/%{name}/extensions
