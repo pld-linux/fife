@@ -6,28 +6,33 @@ Summary:	Flexible Isometric Free Engine
 Summary(pl.UTF-8):	Flexible Isometric Free Engine - elastyczny, wolnodostępny silnik izometryczny
 Name:		fife
 Version:	0.3.5
-Release:	4
+Release:	5
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/fife/%{name}_%{version}.tar.gz
 # Source0-md5:	11ba50b34239535a270d442466632ef7
 Patch0:		%{name}-extra_libs.patch
+Patch1:		%{name}-glee.patch
 URL:		http://fifengine.net/
 BuildRequires:	OpenAL-devel
+BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
 BuildRequires:	SDL_image-devel
 BuildRequires:	SDL_ttf-devel
 BuildRequires:	boost-devel
-BuildRequires:	guichan-devel
-#BuildRequires:	guichan_opengl-devel
-#BuildRequires:	guichan_sdl-devel
+BuildRequires:	guichan-devel >= 0.8.2
+BuildRequires:	guichan-opengl-devel >= 0.8.2
+BuildRequires:	guichan-sdl-devel >= 0.8.2
 BuildRequires:	libpng-devel
 BuildRequires:	libvorbis-devel
-BuildRequires:	python-devel >= 2.7
-BuildRequires:	scons
+BuildRequires:	pkgconfig
+BuildRequires:	python-devel >= 1:2.7
+BuildRequires:	scons >= 2.0
 BuildRequires:	swig-python
 BuildRequires:	tinyxml-devel
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXcursor-devel
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -92,6 +97,7 @@ Ten pakiet zawiera moduł Pythona.
 %prep
 %setup -qn %{name}_%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # force pre C++11 standard, code uses std::make_pair in a way incompatible with rvalue refs

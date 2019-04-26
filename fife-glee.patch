@@ -1,0 +1,30 @@
+--- fife_0.3.5/engine/core/ext/glee/GLee.h.orig	2013-08-21 22:13:07.000000000 +0200
++++ fife_0.3.5/engine/core/ext/glee/GLee.h	2019-04-26 15:57:07.235931514 +0200
+@@ -40,7 +40,7 @@
+ 	#error gl.h included before glee.h
+ #endif
+ 
+-#ifdef __glext_h_
++#if defined(__glext_h_) || defined(__gl_glext_h_)
+ 	#error glext.h included before glee.h
+ #endif
+ 
+@@ -48,7 +48,7 @@
+ 	#error wglext.h included before glee.h
+ #endif
+ 
+-#ifdef __glxext_h_
++#if defined(__glxext_h_) || defined(__glx_glxext_h_)
+ 	#error glxext.h included before glee.h
+ #endif
+ 
+@@ -63,7 +63,9 @@
+ 	#include <OpenGL/gl.h>
+ #else // GLX
+ 	#define __glext_h_  /* prevent glext.h from being included  */
++	#define __gl_glext_h_
+ 	#define __glxext_h_ /* prevent glxext.h from being included */
++	#define __glx_glxext_h_
+ 	#define GLX_GLXEXT_PROTOTYPES
+ 	#include <GL/gl.h>
+ 	#include <GL/glx.h>
