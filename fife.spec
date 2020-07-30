@@ -6,7 +6,7 @@ Summary:	Flexible Isometric Free Engine
 Summary(pl.UTF-8):	Flexible Isometric Free Engine - elastyczny, wolnodostępny silnik izometryczny
 Name:		fife
 Version:	0.3.5
-Release:	6
+Release:	7
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/fife/%{name}_%{version}.tar.gz
